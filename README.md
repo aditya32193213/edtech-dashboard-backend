@@ -17,7 +17,7 @@ A robust Node.js & Express backend responsible for:
 ---
 
 # 🌐 Live Backend API
-🔗 **[https://<your-backend-render-url>.onrender.com](https://edtech-dashboard-backend.onrender.com/)**
+🔗 **https://edtech-dashboard-backend.onrender.com/**
 
 ---
 
