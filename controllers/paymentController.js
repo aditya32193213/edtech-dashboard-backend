@@ -38,8 +38,8 @@ exports.createCheckoutSession = async (req, res) => {
 
       mode: "payment",
 
-      success_url: `${process.env.FRONTEND_URL}/payment-success?courseId=${courseId}`,
-      cancel_url: `${process.env.FRONTEND_URL}/payment-cancel`,
+      success_url: `${process.env.CLIENT_URL}/payment-success?courseId=${courseId}`,
+      cancel_url: `${process.env.CLIENT_URL}/payment-cancel`,
 
       metadata: {
         courseId,
