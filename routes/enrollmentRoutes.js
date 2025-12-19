@@ -1,26 +1,3 @@
-// const express = require("express");
-// const {
-//   enrollInCourse,
-//   enrollAfterPayment,
-//   getMyEnrollments,
-//   updateProgress,
-// } = require("../controllers/enrollmentController");
-
-// const { protect } = require("../middlewares/authMiddleware");
-
-// const router = express.Router();
-
-// router.post("/enroll/:courseId", protect, enrollInCourse);
-// router.get("/enrollments", protect, getMyEnrollments);
-// router.patch("/progress/:courseId", protect, updateProgress);
-// router.post("/enrollments/after-payment", protect, enrollAfterPayment);
-
-// module.exports = router;
-
-
-
-
-
 const express = require("express");
 const {
   enrollInCourse,
