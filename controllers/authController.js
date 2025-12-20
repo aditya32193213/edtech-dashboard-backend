@@ -93,25 +93,25 @@ const profile = async (req, res) => {
 
 const updateProfile = async (req, res) => {
   try {
-    const { name } = req.body;
-
-    if (!name) {
+    if (!req.body.name) {
       return res.status(400).json({ message: "Name is required" });
     }
 
-    const user = await User.findById(req.user);
+    // 🔥 ALWAYS FETCH A REAL MONGOOSE DOCUMENT
+    const user = await User.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    user.name = name;
+    user.name = req.body.name;
     await user.save();
 
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
+      role: user.role,
     });
   } catch (error) {
     console.error("Profile update error:", error);
