@@ -78,22 +78,34 @@ const login = async (req, res) => {
 // =======================
 const profile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     res.json(user);
   } catch (error) {
+    console.error("Profile fetch error:", error);
     res.status(500).json({ message: "Failed to fetch profile" });
   }
 };
 
 const updateProfile = async (req, res) => {
   try {
-    const user = req.user;
+    const { name } = req.body;
 
-    if (!req.body.name) {
+    if (!name) {
       return res.status(400).json({ message: "Name is required" });
     }
 
-    user.name = req.body.name;
+    const user = await User.findById(req.user);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.name = name;
     await user.save();
 
     res.json({
@@ -102,9 +114,11 @@ const updateProfile = async (req, res) => {
       email: user.email,
     });
   } catch (error) {
+    console.error("Profile update error:", error);
     res.status(500).json({ message: "Profile update failed" });
   }
 };
+
 
 
 module.exports = {
