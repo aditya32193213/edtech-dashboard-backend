@@ -13,8 +13,23 @@ dotenv.config();
 connectDB();
 
 const app = express();
+const allowedOrigins = ["http://localhost:3000", "https://edtech-dashboard-frontend.vercel.app"];
 
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (Postman, mobile apps)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.use("/api/auth",authRoutes);
