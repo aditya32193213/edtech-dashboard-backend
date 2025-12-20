@@ -6,52 +6,43 @@ const Progress = require("../models/Progress");
 // =======================
 const enrollAfterPayment = async (req, res) => {
   try {
-    const { courseId, userId } = req.body;
+    const { courseId } = req.body;
 
     if (!courseId) {
       return res.status(400).json({ message: "Course ID is required" });
     }
 
-    const course = await Course.findById(courseId);
-    if (!course) {
-      return res.status(404).json({ message: "Course not found" });
-    }
-
-    // ✅ FIX: safely determine user
-    const enrolledUserId =
-      req.user?.id || userId || null;
-
-    if (!enrolledUserId) {
-      return res
-        .status(400)
-        .json({ message: "User identification missing" });
-    }
-
-    const progress = await Progress.create({
-      user: enrolledUserId,
+    const existing = await Progress.findOne({
+      user: req.user.id,
       course: courseId,
     });
 
-    if (!course.enrolledStudents.includes(enrolledUserId)) {
-      course.enrolledStudents.push(enrolledUserId);
-      await course.save();
+    if (existing) {
+      return res.status(200).json({
+        message: "Already enrolled",
+        progress: existing,
+      });
     }
+
+    const progress = await Progress.create({
+      user: req.user.id,
+      course: courseId,
+    });
+
+    await Course.findByIdAndUpdate(courseId, {
+      $addToSet: { enrolledStudents: req.user.id },
+    });
 
     res.status(201).json({
       message: "Enrollment successful after payment",
       progress,
     });
   } catch (error) {
-    if (error.code === 11000) {
-      return res
-        .status(200)
-        .json({ message: "Already enrolled in this course" });
-    }
-
-    console.error("Enroll after payment error:", error);
+    console.error(error);
     res.status(500).json({ message: "Enrollment failed" });
   }
 };
+
 
 // =======================
 // ENROLL IN COURSE

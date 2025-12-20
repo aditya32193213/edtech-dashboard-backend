@@ -39,6 +39,8 @@ app.use("/api/payments", paymentRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerDocument));
 
+
+
 app.get("/", (req, res) => {
   res.send("EdTech Backend is running");
 });
