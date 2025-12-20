@@ -85,8 +85,31 @@ const profile = async (req, res) => {
   }
 };
 
+const updateProfile = async (req, res) => {
+  try {
+    const user = req.user;
+
+    if (!req.body.name) {
+      return res.status(400).json({ message: "Name is required" });
+    }
+
+    user.name = req.body.name;
+    await user.save();
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Profile update failed" });
+  }
+};
+
+
 module.exports = {
   register,
   login,
   profile,
+  updateProfile,
 };
