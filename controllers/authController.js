@@ -78,18 +78,14 @@ const login = async (req, res) => {
 // =======================
 const profile = async (req, res) => {
   try {
-    const user = await User.findById(req.user).select("-password");
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.json(user);
+    // req.user already populated by protect middleware
+    res.json(req.user);
   } catch (error) {
     console.error("Profile fetch error:", error);
     res.status(500).json({ message: "Failed to fetch profile" });
   }
 };
+
 
 const updateProfile = async (req, res) => {
   try {
@@ -97,27 +93,22 @@ const updateProfile = async (req, res) => {
       return res.status(400).json({ message: "Name is required" });
     }
 
-    // 🔥 ALWAYS FETCH A REAL MONGOOSE DOCUMENT
-    const user = await User.findById(req.user._id);
-
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    user.name = req.body.name;
-    await user.save();
+    // req.user is already a Mongoose document
+    req.user.name = req.body.name;
+    await req.user.save();
 
     res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
+      _id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+      role: req.user.role,
     });
   } catch (error) {
     console.error("Profile update error:", error);
     res.status(500).json({ message: "Profile update failed" });
   }
 };
+
 
 
 
