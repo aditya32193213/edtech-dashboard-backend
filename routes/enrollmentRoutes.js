@@ -14,7 +14,7 @@ const router = express.Router();
 router.post("/enroll/:courseId", protect, enrollInCourse);
 
 // Enroll after Stripe payment
-router.post("/enrollments/after-payment", protect, enrollAfterPayment);
+router.post("/enrollments/after-payment", enrollAfterPayment);
 
 // Get logged-in user's enrollments
 router.get("/enrollments", protect, getMyEnrollments);

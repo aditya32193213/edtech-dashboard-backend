@@ -6,32 +6,40 @@ const Progress = require("../models/Progress");
 // =======================
 const enrollAfterPayment = async (req, res) => {
   try {
-    const { courseId } = req.body;
+    const { courseId, email } = req.body;
 
-    if (!courseId) {
-      return res.status(400).json({ message: "Course ID is required" });
+    if (!courseId || !email) {
+      return res.status(400).json({ message: "Course ID and email required" });
+    }
+
+    const course = await Course.findById(courseId);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
     const existing = await Progress.findOne({
-      user: req.user.id,
+      user: user._id,
       course: courseId,
     });
 
     if (existing) {
-      return res.status(200).json({
-        message: "Already enrolled",
-        progress: existing,
-      });
+      return res.status(200).json({ message: "Already enrolled" });
     }
 
     const progress = await Progress.create({
-      user: req.user.id,
+      user: user._id,
       course: courseId,
     });
 
-    await Course.findByIdAndUpdate(courseId, {
-      $addToSet: { enrolledStudents: req.user.id },
-    });
+    if (!course.enrolledStudents.includes(user._id)) {
+      course.enrolledStudents.push(user._id);
+      await course.save();
+    }
 
     res.status(201).json({
       message: "Enrollment successful after payment",
@@ -42,7 +50,6 @@ const enrollAfterPayment = async (req, res) => {
     res.status(500).json({ message: "Enrollment failed" });
   }
 };
-
 
 // =======================
 // ENROLL IN COURSE
