@@ -6,7 +6,7 @@ const Progress = require("../models/Progress");
 // =======================
 const enrollAfterPayment = async (req, res) => {
   try {
-    const { courseId } = req.body;
+    const { courseId, userId } = req.body;
 
     if (!courseId) {
       return res.status(400).json({ message: "Course ID is required" });
@@ -17,13 +17,23 @@ const enrollAfterPayment = async (req, res) => {
       return res.status(404).json({ message: "Course not found" });
     }
 
+    // ✅ FIX: safely determine user
+    const enrolledUserId =
+      req.user?.id || userId || null;
+
+    if (!enrolledUserId) {
+      return res
+        .status(400)
+        .json({ message: "User identification missing" });
+    }
+
     const progress = await Progress.create({
-      user: req.user.id,
+      user: enrolledUserId,
       course: courseId,
     });
 
-    if (!course.enrolledStudents.includes(req.user.id)) {
-      course.enrolledStudents.push(req.user.id);
+    if (!course.enrolledStudents.includes(enrolledUserId)) {
+      course.enrolledStudents.push(enrolledUserId);
       await course.save();
     }
 
@@ -37,6 +47,8 @@ const enrollAfterPayment = async (req, res) => {
         .status(200)
         .json({ message: "Already enrolled in this course" });
     }
+
+    console.error("Enroll after payment error:", error);
     res.status(500).json({ message: "Enrollment failed" });
   }
 };
