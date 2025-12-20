@@ -2,16 +2,16 @@ const express = require("express");
 const router = express.Router();
 
 const {
+  getProgressByCourse,
   updateProgress,
-  getUserProgress,
 } = require("../controllers/progressController");
 
 const { protect } = require("../middlewares/authMiddleware");
 
-// Update progress
-router.patch("/:id", protect, updateProgress);
+// GET progress for a course
+router.get("/course/:courseId", protect, getProgressByCourse);
 
-// Get logged-in user's progress
-router.get("/", protect, getUserProgress);
+// UPDATE progress for a course
+router.patch("/course/:courseId", protect, updateProgress);
 
 module.exports = router;

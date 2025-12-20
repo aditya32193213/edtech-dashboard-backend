@@ -1,3 +1,4 @@
+require("events").EventEmitter.defaultMaxListeners = 20;
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -30,11 +31,12 @@ app.use(
     credentials: true,
   })
 );
+
 app.use(express.json());
 
 app.use("/api/auth",authRoutes);
 app.use("/api/courses", courseRoutes);
-app.use("/api", enrollmentRoutes);
+app.use("/api/enrollments", enrollmentRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerDocument));

@@ -1,59 +1,52 @@
 const Progress = require("../models/Progress");
 
-// ----------------------------------------
-// UPDATE PROGRESS (PATCH)
-// ----------------------------------------
-exports.updateProgress = async (req, res) => {
+// =======================
+// GET PROGRESS BY COURSE
+// =======================
+exports.getProgressByCourse = async (req, res) => {
   try {
-    const { completedPercentage } = req.body;
-
-    if (completedPercentage < 0 || completedPercentage > 100) {
-      return res.status(400).json({
-        message: "Progress must be between 0 and 100",
-      });
-    }
-
     const progress = await Progress.findOne({
-      _id: req.params.id,
       user: req.user.id,
+      course: req.params.courseId,
     });
 
     if (!progress) {
-      return res.status(404).json({
-        message: "Progress not found",
-      });
+      return res.json({ completedPercentage: 0 });
     }
 
-    progress.completedPercentage = completedPercentage;
-    progress.lastAccessed = new Date();
-
-    await progress.save();
-
-    res.status(200).json({
-      message: "Progress updated successfully",
-      progress,
-    });
+    res.json(progress);
   } catch (error) {
-    console.error("Progress update error:", error);
-    res.status(500).json({
-      message: "Failed to update progress",
-    });
+    res.status(500).json({ message: "Failed to fetch progress" });
   }
 };
 
-// ----------------------------------------
-// GET USER PROGRESS
-// ----------------------------------------
-exports.getUserProgress = async (req, res) => {
+// =======================
+// UPDATE PROGRESS (CLAMPED)
+// =======================
+exports.updateProgress = async (req, res) => {
   try {
-    const progress = await Progress.find({ user: req.user.id })
-      .populate("course", "title category level");
+    let { completedPercentage } = req.body;
 
-    res.status(200).json(progress);
+    // 🔒 Clamp value between 0 and 100
+    completedPercentage = Math.max(
+      0,
+      Math.min(100, Number(completedPercentage))
+    );
+
+    const progress = await Progress.findOneAndUpdate(
+      {
+        user: req.user.id,
+        course: req.params.courseId,
+      },
+      {
+        completedPercentage,
+        lastAccessed: Date.now(),
+      },
+      { upsert: true, new: true }
+    );
+
+    res.json(progress);
   } catch (error) {
-    console.error("Get progress error:", error);
-    res.status(500).json({
-      message: "Failed to fetch progress",
-    });
+    res.status(500).json({ message: "Failed to update progress" });
   }
 };

@@ -14,16 +14,14 @@ const enrollmentSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["enrolled"],
-      default: "enrolled",
-    },
-    paymentStatus: {
-      type: String,
-      enum: ["paid"],
-      default: "paid",
+      enum: ["active", "completed"],
+      default: "active",
     },
   },
   { timestamps: true }
 );
+
+// ✅ Prevent duplicate enrollments
+enrollmentSchema.index({ user: 1, course: 1 }, { unique: true });
 
 module.exports = mongoose.model("Enrollment", enrollmentSchema);
