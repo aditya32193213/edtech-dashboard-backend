@@ -1,4 +1,5 @@
 const Course = require("../models/Course");
+const User = require("../models/User");
 
 // =======================
 // GET ALL COURSES
@@ -10,9 +11,18 @@ const getAllCourses = async (req, res) => {
     const query = {};
 
     if (search) {
+      // 1. Find instructors matching the name
+      const matchingInstructors = await User.find({
+        name: { $regex: search, $options: "i" },
+      }).select("_id");
+
+      const instructorIds = matchingInstructors.map((u) => u._id);
+
+      // 2. Search Courses by Title, Category OR Instructor ID
       query.$or = [
         { title: { $regex: search, $options: "i" } },
         { category: { $regex: search, $options: "i" } },
+        { instructor: { $in: instructorIds } }, // ✅ Add this line
       ];
     }
 
@@ -25,7 +35,6 @@ const getAllCourses = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
-
 
 // =======================
 // GET COURSE BY ID
