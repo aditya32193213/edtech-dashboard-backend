@@ -7,22 +7,22 @@ const User = require("../models/User");
 const getAllCourses = async (req, res) => {
   try {
     const { search } = req.query;
-
     const query = {};
 
     if (search) {
-      // 1. Find instructors matching the name
+      // 1. Find instructors whose name matches the search
       const matchingInstructors = await User.find({
         name: { $regex: search, $options: "i" },
+        role: "instructor" // Optional: optimizations
       }).select("_id");
 
       const instructorIds = matchingInstructors.map((u) => u._id);
 
-      // 2. Search Courses by Title, Category OR Instructor ID
+      // 2. Search Courses by Title OR Category OR Instructor
       query.$or = [
         { title: { $regex: search, $options: "i" } },
         { category: { $regex: search, $options: "i" } },
-        { instructor: { $in: instructorIds } }, // ✅ Add this line
+        { instructor: { $in: instructorIds } }, // <--- This enables instructor search
       ];
     }
 
