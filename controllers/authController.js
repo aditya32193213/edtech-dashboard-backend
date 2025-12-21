@@ -86,28 +86,34 @@ const profile = async (req, res) => {
   }
 };
 
-
 const updateProfile = async (req, res) => {
   try {
-    if (!req.body.name) {
+    const { name } = req.body;
+    if (!name) {
       return res.status(400).json({ message: "Name is required" });
     }
 
-    // req.user is already a Mongoose document
-    req.user.name = req.body.name;
-    await req.user.save();
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.name = name;
+    await user.save();
 
     res.json({
-      _id: req.user._id,
-      name: req.user.name,
-      email: req.user.email,
-      role: req.user.role,
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
     });
   } catch (error) {
     console.error("Profile update error:", error);
     res.status(500).json({ message: "Profile update failed" });
   }
 };
+
+
 
 
 
