@@ -1,5 +1,6 @@
 const Enrollment = require("../models/Enrollment");
 const Course = require("../models/Course");
+const Progress = require("../models/Progress"); // ✅ ADDED
 
 // =======================
 // ENROLL AFTER PAYMENT
@@ -49,6 +50,14 @@ exports.enrollAfterPayment = async (req, res) => {
       user: userId,
       course: courseId,
       status: "active",
+    });
+
+    // ✅ CREATE PROGRESS RECORD (NEW FIX)
+    // Unique index on Progress prevents duplicates automatically
+    await Progress.create({
+      user: userId,
+      course: courseId,
+      completedPercentage: 0,
     });
 
     return res.status(201).json({

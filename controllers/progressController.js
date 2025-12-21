@@ -1,10 +1,17 @@
 const Progress = require("../models/Progress");
+const Enrollment = require("../models/Enrollment");
 
 // =======================
 // GET PROGRESS BY COURSE
 // =======================
 exports.getProgressByCourse = async (req, res) => {
   try {
+    if (req.user.role !== "student") {
+      return res.status(403).json({
+        message: "Only students can view progress",
+      });
+    }
+
     const progress = await Progress.findOne({
       user: req.user.id,
       course: req.params.courseId,
@@ -21,28 +28,43 @@ exports.getProgressByCourse = async (req, res) => {
 };
 
 // =======================
-// UPDATE PROGRESS (CLAMPED)
+// UPDATE PROGRESS
 // =======================
 exports.updateProgress = async (req, res) => {
   try {
+    if (req.user.role !== "student") {
+      return res.status(403).json({
+        message: "Only students can update progress",
+      });
+    }
+
+    const { courseId } = req.params;
     let { completedPercentage } = req.body;
 
-    // 🔒 Clamp value between 0 and 100
     completedPercentage = Math.max(
       0,
       Math.min(100, Number(completedPercentage))
     );
 
+    // ✅ Ensure user is enrolled
+    const enrollment = await Enrollment.findOne({
+      user: req.user.id,
+      course: courseId,
+    });
+
+    if (!enrollment) {
+      return res.status(403).json({
+        message: "Enroll in the course before updating progress",
+      });
+    }
+
     const progress = await Progress.findOneAndUpdate(
-      {
-        user: req.user.id,
-        course: req.params.courseId,
-      },
+      { user: req.user.id, course: courseId },
       {
         completedPercentage,
-        lastAccessed: Date.now(),
+        lastAccessed: new Date(),
       },
-      { upsert: true, new: true }
+      { new: true } // ❌ removed upsert
     );
 
     res.json(progress);
