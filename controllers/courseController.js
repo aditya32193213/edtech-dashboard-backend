@@ -5,21 +5,27 @@ const Course = require("../models/Course");
 // =======================
 const getAllCourses = async (req, res) => {
   try {
-    const courses = await Course.find()
+    const { search } = req.query;
+
+    const query = {};
+
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { category: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    const courses = await Course.find(query)
       .populate("instructor", "name email");
 
-    // 🔹 Transform response for frontend compatibility
-    const formattedCourses = courses.map(course => ({
-      ...course._doc,
-      instructor: course.instructor?.name || "Unknown Instructor",
-    }));
-
-    res.json(formattedCourses);
+    res.json(courses);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to fetch courses" });
+    console.error("Fetch courses error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
+
 
 // =======================
 // GET COURSE BY ID
@@ -27,22 +33,16 @@ const getAllCourses = async (req, res) => {
 const getCourseById = async (req, res) => {
   try {
     const course = await Course.findById(req.params.id)
-      .populate("instructor", "name email");
+      .populate("instructor", "name email avatar bio");
 
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
     }
 
-    // 🔹 Transform response
-    const formattedCourse = {
-      ...course._doc,
-      instructor: course.instructor?.name || "Unknown Instructor",
-    };
-
-    res.json(formattedCourse);
+    res.json(course);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Failed to fetch course" });
+    console.error("Get course error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
