@@ -69,6 +69,13 @@ exports.enrollAfterPayment = async (req, res) => {
 // =======================
 exports.getMyEnrollments = async (req, res) => {
   try {
+    // ✅ Only students can access enrollments
+    if (req.user.role !== "student") {
+      return res.status(403).json({
+        message: "Only students can view enrollments",
+      });
+    }
+
     const enrollments = await Enrollment.find({
       user: req.user.id,
     }).populate({
@@ -82,7 +89,6 @@ exports.getMyEnrollments = async (req, res) => {
     return res.status(200).json(enrollments);
   } catch (error) {
     console.error("Fetch enrollments error:", error.message);
-
     return res.status(500).json({
       message: "Failed to fetch enrollments",
     });
