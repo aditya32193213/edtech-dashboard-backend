@@ -1,5 +1,5 @@
 const Course = require("../models/Course");
-const User = require("../models/User");
+const User = require("../models/User"); // ✅ Required for instructor lookup
 
 // =======================
 // GET ALL COURSES
@@ -10,24 +10,23 @@ const getAllCourses = async (req, res) => {
     const query = {};
 
     if (search) {
-      // 1. Find instructors whose name matches the search
+      // 1. Find User IDs for instructors matching the name
       const matchingInstructors = await User.find({
         name: { $regex: search, $options: "i" },
-        role: "instructor" // Optional: optimizations
       }).select("_id");
 
       const instructorIds = matchingInstructors.map((u) => u._id);
 
-      // 2. Search Courses by Title OR Category OR Instructor
+      // 2. Search Courses by Title, Category, OR Instructor ID
       query.$or = [
         { title: { $regex: search, $options: "i" } },
         { category: { $regex: search, $options: "i" } },
-        { instructor: { $in: instructorIds } }, // <--- This enables instructor search
+        { instructor: { $in: instructorIds } }, 
       ];
     }
 
     const courses = await Course.find(query)
-      .populate("instructor", "name email");
+      .populate("instructor", "name email avatar"); 
 
     res.json(courses);
   } catch (error) {
@@ -42,7 +41,7 @@ const getAllCourses = async (req, res) => {
 const getCourseById = async (req, res) => {
   try {
     const course = await Course.findById(req.params.id)
-      .populate("instructor", "name email avatar bio");
+      .populate("instructor", "name email avatar bio"); 
 
     if (!course) {
       return res.status(404).json({ message: "Course not found" });
@@ -56,7 +55,7 @@ const getCourseById = async (req, res) => {
 };
 
 // =======================
-// CREATE COURSE (Instructor)
+// CREATE COURSE 
 // =======================
 const createCourse = async (req, res) => {
   try {
@@ -64,12 +63,11 @@ const createCourse = async (req, res) => {
       ...req.body,
       instructor: req.user.id,
     });
-
     res.status(201).json(course);
   } catch (error) {
-  console.error("CREATE COURSE ERROR:", error.message);
-  res.status(500).json({ message: error.message });
-}
+    console.error("CREATE COURSE ERROR:", error.message);
+    res.status(500).json({ message: error.message });
+  }
 };
 
 // =======================
@@ -78,11 +76,10 @@ const createCourse = async (req, res) => {
 const updateCourse = async (req, res) => {
   try {
     const course = await Course.findByIdAndUpdate(
-      req.params.id,
-      req.body,
+      req.params.id, 
+      req.body, 
       { new: true }
     );
-
     res.json(course);
   } catch (error) {
     console.error(error);

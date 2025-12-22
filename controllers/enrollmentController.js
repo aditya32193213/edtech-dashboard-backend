@@ -1,6 +1,6 @@
 const Enrollment = require("../models/Enrollment");
 const Course = require("../models/Course");
-const Progress = require("../models/Progress"); // ✅ ADDED
+const Progress = require("../models/Progress");
 
 // =======================
 // ENROLL AFTER PAYMENT
@@ -10,21 +10,21 @@ exports.enrollAfterPayment = async (req, res) => {
     const { courseId } = req.body;
     const userId = req.user.id;
 
-    // ✅ Allow only students to enroll
+    // 1. Check User Role
     if (req.user.role !== "student") {
       return res.status(403).json({
         message: "Only students can enroll in courses",
       });
     }
 
-    // ✅ Validate input
+    // 2. Validate Input
     if (!courseId) {
       return res.status(400).json({
         message: "Course ID is required",
       });
     }
 
-    // ✅ Check course existence
+    // 3. Check Course Existence
     const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({
@@ -32,7 +32,7 @@ exports.enrollAfterPayment = async (req, res) => {
       });
     }
 
-    // ✅ Prevent duplicate enrollment (app-level)
+    // 4. Check Duplicate Enrollment
     const existingEnrollment = await Enrollment.findOne({
       user: userId,
       course: courseId,
@@ -45,28 +45,34 @@ exports.enrollAfterPayment = async (req, res) => {
       });
     }
 
-    // ✅ Create enrollment
+    // 5. Create Enrollment Record
     const enrollment = await Enrollment.create({
       user: userId,
       course: courseId,
       status: "active",
     });
 
-    // ✅ CREATE PROGRESS RECORD (NEW FIX)
-    // Unique index on Progress prevents duplicates automatically
-    await Progress.create({
-      user: userId,
-      course: courseId,
-      completedPercentage: 0,
-    });
+    // 6. Initialize Progress (Long-Term Safe Fix)
+    // using $setOnInsert ensures we NEVER overwrite progress if it already exists
+    await Progress.findOneAndUpdate(
+      { user: userId, course: courseId },
+      {
+        $setOnInsert: {
+          user: userId,
+          course: courseId,
+          completedPercentage: 0,
+          lastAccessed: new Date(),
+        },
+      },
+      { upsert: true, new: true }
+    );
 
     return res.status(201).json({
       message: "Enrollment successful",
       enrollment,
     });
   } catch (error) {
-    console.error("Enroll after payment error:", error.message);
-
+    console.error("Enrollment error:", error.message);
     return res.status(500).json({
       message: "Enrollment failed",
     });
@@ -78,7 +84,6 @@ exports.enrollAfterPayment = async (req, res) => {
 // =======================
 exports.getMyEnrollments = async (req, res) => {
   try {
-    // ✅ Only students can access enrollments
     if (req.user.role !== "student") {
       return res.status(403).json({
         message: "Only students can view enrollments",
