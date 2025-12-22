@@ -122,6 +122,29 @@ backend/
 
 # 📡 API Documentation
 
+## API Endpoints
+
+### Auth
+POST /api/auth/register
+POST /api/auth/login
+
+### Courses
+GET /api/courses
+GET /api/courses/:id
+POST /api/courses
+PUT /api/courses/:id
+DELETE /api/courses/:id
+
+### Enrollment
+POST /api/enrollments/:courseId
+GET /api/enrollments/my
+
+### Progress
+GET /api/progress/course/:courseId
+PATCH /api/progress/course/:courseId
+
+-----
+
 ## 📘 Swagger
 
 Interactive API documentation is available at:

@@ -1,5 +1,5 @@
 const Course = require("../models/Course");
-const User = require("../models/User"); // ✅ Required for instructor lookup
+const User = require("../models/User");
 
 // =======================
 // GET ALL COURSES
@@ -10,14 +10,12 @@ const getAllCourses = async (req, res) => {
     const query = {};
 
     if (search) {
-      // 1. Find User IDs for instructors matching the name
       const matchingInstructors = await User.find({
         name: { $regex: search, $options: "i" },
       }).select("_id");
 
       const instructorIds = matchingInstructors.map((u) => u._id);
 
-      // 2. Search Courses by Title, Category, OR Instructor ID
       query.$or = [
         { title: { $regex: search, $options: "i" } },
         { category: { $regex: search, $options: "i" } },
@@ -31,6 +29,22 @@ const getAllCourses = async (req, res) => {
     res.json(courses);
   } catch (error) {
     console.error("Fetch courses error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// =======================
+// GET MY COURSES (Instructor)
+// =======================
+const getMyCourses = async (req, res) => {
+  try {
+    // Find courses where instructor matches logged in user
+    const courses = await Course.find({ instructor: req.user.id })
+      .populate("enrolledStudents", "name email"); // Populate students for stats
+
+    res.json(courses);
+  } catch (error) {
+    console.error("Fetch my courses error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -102,6 +116,7 @@ const deleteCourse = async (req, res) => {
 
 module.exports = {
   getAllCourses,
+  getMyCourses, // ✅ Exported
   getCourseById,
   createCourse,
   updateCourse,
