@@ -6,8 +6,6 @@
 
 # 
 
-![LearnPro Banner](https://via.placeholder.com/1200x400.png?text=LearnPro+EdTech+Platform+Banner)
-
 ---
 
 ## ✨ Key Features
@@ -54,9 +52,9 @@ A robust Node.js & Express backend responsible for:
 
 # 🌐 Live Demo & API
 
-🔗 Frontend Demo: **https://edtech-dashboard-frontend.vercel.app/**
-🔗 Backend API: **https://edtech-dashboard-backend.onrender.com/**
-🔗 Swagger Docs: **https://edtech-dashboard-backend.onrender.com/api-docs/**
+* 🔗 Frontend Demo: **https://edtech-dashboard-frontend.vercel.app/**
+* 🔗 Backend API: **https://edtech-dashboard-backend.onrender.com/**
+* 🔗 Swagger Docs: **https://edtech-dashboard-backend.onrender.com/api-docs/**
 
 
 ---
@@ -259,6 +257,8 @@ npm run dev
 npm start
 ```
 
+---
+
 ### 🤝 Contributing
 Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
 
@@ -268,6 +268,7 @@ Contributions are what make the open-source community such an amazing place to l
 4. Push to the Branch (git push origin feature/AmazingFeature)
 5. Open a Pull Request
 
+----
 
 # 🧑‍💻 Author
 
@@ -275,13 +276,20 @@ Aditya
 Full Stack Developer
 GitHub: aditya32193213
 
+---
+
 # ⭐ Support
 
 If you like this project, please ⭐ star the repository.
 Your support helps me grow as a developer ✨
 
+----
+
 # 📄 License
 Distributed under the MIT License. See LICENSE for more information.
+
+
+---
 
 <p align="center"> Made with ❤️ by <a href="https://www.google.com/search?q=https://github.com/your-username">Aditya</a> </p>
 
