@@ -1,5 +1,6 @@
 const Course = require("../models/Course");
 const User = require("../models/User");
+const Enrollment = require("../models/Enrollment");
 
 // =======================
 // GET ALL COURSES
@@ -38,11 +39,26 @@ const getAllCourses = async (req, res) => {
 // =======================
 const getMyCourses = async (req, res) => {
   try {
-    // Find courses where instructor matches logged in user
-    const courses = await Course.find({ instructor: req.user.id })
-      .populate("enrolledStudents", "name email"); // Populate students for stats
+    // 1. Get all courses by this instructor
+    const courses = await Course.find({ instructor: req.user.id }).lean();
 
-    res.json(courses);
+    // 2. Manual Lookup: Fetch students for each course directly from Enrollments
+    // This fixes the "missing students" issue by being the source of truth
+    const coursesWithData = await Promise.all(
+      courses.map(async (course) => {
+        const enrollments = await Enrollment.find({ course: course._id })
+          .populate("user", "name email");
+        
+        const students = enrollments.map(e => e.user);
+        
+        return { 
+          ...course, 
+          enrolledStudents: students // ✅ Now contains the actual list of students
+        };
+      })
+    );
+
+    res.json(coursesWithData);
   } catch (error) {
     console.error("Fetch my courses error:", error);
     res.status(500).json({ message: "Server error" });
