@@ -2,7 +2,7 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// Generate JWT
+
 const generateToken = (user) => {
   return jwt.sign(
     { id: user._id, role: user.role },
@@ -11,9 +11,7 @@ const generateToken = (user) => {
   );
 };
 
-// =======================
-// REGISTER USER
-// =======================
+
 const register = async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
@@ -32,7 +30,7 @@ const register = async (req, res) => {
       role,
     });
 
-    // Remove password before sending response
+    
     const { password: _, ...userData } = user._doc;
 
     res.status(201).json({
@@ -44,9 +42,7 @@ const register = async (req, res) => {
   }
 };
 
-// =======================
-// LOGIN USER
-// =======================
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -61,7 +57,7 @@ const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Remove password before sending response
+    
     const { password: _, ...userData } = user._doc;
 
     res.json({
@@ -73,12 +69,10 @@ const login = async (req, res) => {
   }
 };
 
-// =======================
-// GET USER PROFILE
-// =======================
+
 const profile = async (req, res) => {
   try {
-    // req.user already populated by protect middleware
+    
     res.json(req.user);
   } catch (error) {
     console.error("Profile fetch error:", error);
@@ -94,7 +88,6 @@ const updateProfile = async (req, res) => {
       return res.status(400).json({ message: "Name is required" });
     }
 
-    // 🔥 ALWAYS refetch as real Mongoose document
     const user = await User.findById(req.user._id);
 
     if (!user) {

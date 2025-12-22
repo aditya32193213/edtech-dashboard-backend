@@ -19,7 +19,6 @@ const allowedOrigins = ["http://localhost:3000", "https://edtech-dashboard-front
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (Postman, mobile apps)
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {

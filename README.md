@@ -1,8 +1,44 @@
-# ⚙️ EdTech Dashboard Backend
+# 🎓 LearnPro - Modern EdTech Learning Platform
 
-_The backend engine powering authentication, course management, enrollments, payments, and progress tracking for the EdTech Dashboard platform._
+> **LearnPro** is a full-stack Learning Management System (LMS) designed to bridge the gap between instructors and students. It features a robust course marketplace, secure payments, video streaming, and role-based dashboards for a seamless educational experience.
 
 <p align="center"> <img src="https://img.shields.io/badge/Node.js-18-green?logo=node.js&logoColor=white" /> <img src="https://img.shields.io/badge/Express.js-Backend-black?logo=express&logoColor=white" /> <img src="https://img.shields.io/badge/MongoDB-Database-green?logo=mongodb" /> <img src="https://img.shields.io/badge/JWT-Authentication-blue" /> <img src="https://img.shields.io/badge/Stripe-Payments-purple?logo=stripe" /> <img src="https://img.shields.io/badge/Status-Production-success" /> </p>
+
+# 
+
+![LearnPro Banner](https://via.placeholder.com/1200x400.png?text=LearnPro+EdTech+Platform+Banner)
+
+---
+
+## ✨ Key Features
+
+### 🔐 Authentication & Security
+* **User Registration & Login**: Secure access for both Students and Instructors.
+* **JWT Authentication**: Stateless authentication mechanism.
+* **Role-Based Access Control (RBAC)**: Distinct permissions for Students vs. Instructors.
+* **Secure Routes**: Middleware protection for private API endpoints.
+
+### 👨‍🎓 For Students
+* **Course Discovery:** Advanced search and filtering by category, level, and popularity.
+* **Student Dashboard:** personalized learning path, progress tracking, and achievements.
+* **Secure Enrollment:** Integrated Stripe payment gateway for seamless course purchasing.
+* **Interactive Learning:** Video player with "Mark as Watched" progress tracking.
+* **Dark Mode:** Fully responsive UI with a beautiful dark/light theme toggle.
+
+### 👨‍🏫 For Instructors
+* **Instructor Dashboard:** Real-time analytics on earnings, total students, and course performance.
+* **Course Management:** Create, edit, and delete courses with ease.
+* **Content Creation:** Add video lectures, thumbnails, and detailed descriptions.
+* **Student Insights:** View enrollment data for specific courses.
+
+### 🏗️ System Architecture
+The application follows a standard MVC (Model-View-Controller) architectural pattern.
+* **Frontend**: React.js acts as the client, consuming RESTful APIs.
+* **Backend**: Node.js/Express handles business logic, authentication, and payment processing.
+* **Database**: MongoDB stores user data, course content, and enrollment records.
+
+---
+
 
 A robust Node.js & Express backend responsible for:
 
@@ -16,10 +52,27 @@ A robust Node.js & Express backend responsible for:
 
 ---
 
-# 🌐 Live Backend API
-🔗 **https://edtech-dashboard-backend.onrender.com/**
+# 🌐 Live Demo & API
+
+🔗 Frontend Demo: **https://edtech-dashboard-frontend.vercel.app/**
+🔗 Backend API: **https://edtech-dashboard-backend.onrender.com/**
+🔗 Swagger Docs: **https://edtech-dashboard-backend.onrender.com/api-docs/**
+
 
 ---
+
+## 📸 Screenshots
+
+| **Student Dashboard** | **Course Details** |
+|:---:|:---:|
+| ![Dashboard](https://via.placeholder.com/500x300?text=Student+Dashboard) | ![Course Page](https://via.placeholder.com/500x300?text=Course+Details) |
+
+| **Instructor Dashboard** | **Add Course Page** |
+|:---:|:---:|
+| ![Instructor](https://via.placeholder.com/500x300?text=Instructor+Dashboard) | ![Add Course](https://via.placeholder.com/500x300?text=Create+Course) |
+
+---
+
 
 # ✨ Features
 ### 🔐 1. Authentication & Authorization
@@ -72,203 +125,82 @@ Clean, predictable APIs designed for scalability and frontend integration.
 
 ---
 
-# 🧩 Tech Stack
+## 🛠️ Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| **Runtime** |	Node.js|
-| **Framework** | Express.js |
-| **Database**	| MongoDB + Mongoose |
-| ***Authentication*** | JWT |
-| **Payments** | Stripe |
-| **Security** | bcrypt, CORS|
-| **Deployment** | Render |
+### **Frontend (Client)**
+* **Framework:** React.js (Vite)
+* **Styling:** Tailwind CSS
+* **Routing:** React Router DOM v6
+* **State Management:** React Hooks (Context API)
+* **HTTP Client:** Axios
+* **Icons:** Heroicons / Lucide React
+* **Notifications:** React Hot Toast
+
+### **Backend (Server)**
+* **Runtime:** Node.js
+* **Framework:** Express.js
+* **Database:** MongoDB & Mongoose
+* **Authentication:** JWT (JSON Web Tokens)
+* **Payments:** Stripe API
+* **Security:** Bcrypt.js, CORS
 
 ---
 
 # 🗂️ Folder Structure
 ```plaintext
-backend/
-│── controllers/
-│   ├── authController.js
-│   ├── courseController.js
-│   ├── enrollmentController.js
-│   ├── paymentController.js
-│   ├── progressController.js
+learnpro/
+├── backend/
+│   ├── config/         # DB connection
+│   ├── controllers/    # Route logic (Auth, Course, Enrollment)
+│   ├── models/         # Mongoose Schemas (User, Course, Progress)
+│   ├── routes/         # API Routes
+│   └── middleware/     # Auth & Role middleware
 │
-│── models/
-│   ├── User.js
-│   ├── Course.js
-│   ├── Enrollment.js
-│   ├── Progress.js
-│
-│── routes/
-│   ├── authRoutes.js
-│   ├── courseRoutes.js
-│   ├── enrollmentRoutes.js
-│   ├── paymentRoutes.js
-│   ├── progressRoutes.js
-│
-│── middlewares/
-│   ├── authMiddleware.js
-│   ├── roleMiddleware.js
-│
-│── server.js
-│── package.json
-│── .env.example
-│── .gitignore
+├── frontend/
+│   ├── src/
+│   │   ├── components/ # Reusable UI (Navbar, Cards, Loaders)
+│   │   ├── pages/      # Views (Dashboard, Login, CourseDetails)
+│   │   ├── services/   # API calls (Axios instances)
+│   │   └── utils/      # Helpers (Auth, Formatting)
+│   └── public/         # Static assets
 ```
 ---
 
 # 📡 API Documentation
 
-## API Endpoints
+## 🛣️ API Endpoints
 
-### Auth
-POST /api/auth/register
-POST /api/auth/login
+### 🔐 Authentication
 
-### Courses
-GET /api/courses
-GET /api/courses/:id
-POST /api/courses
-PUT /api/courses/:id
-DELETE /api/courses/:id
+* POST /api/auth/register - Register a new user (Student/Instructor)
+* POST /api/auth/login - Login user & return JWT
 
-### Enrollment
-POST /api/enrollments/:courseId
-GET /api/enrollments/my
+### 📚 Courses
+* GET /api/courses - Fetch all courses (with filters)
+* GET /api/courses/:id - Get single course details
+* POST /api/courses - Create a new course (Instructor only)
+* PUT /api/courses/:id - Update a course (Instructor only)
+* DELETE /api/courses/:id - Delete a course (Instructor only)
 
-### Progress
-GET /api/progress/course/:courseId
-PATCH /api/progress/course/:courseId
+### 🎓 Enrollment
+* POST /api/enrollment/checkout - Create Stripe checkout session
+* POST /api/enrollment/verify - Verify payment & enroll user
+* GET /api/enrollment/my-enrollments - Get logged-in user's courses
 
+### 💳 Payments
+* POST /api/payments/checkout - Create Checkout Session
+* POST /api/enrollments/after-payment - Enrollment After Payment
+
+### 📈 Progress
+* PATCH /api/progress/:courseId - Update Progress
 -----
 
 ## 📘 Swagger
 
 Interactive API documentation is available at:
 
-🔗 **http://localhost:10000/api-docs**
+🔗 **https://edtech-dashboard-backend.onrender.com/api-docs/**
 
----
-
-## 🔐 Authentication
-
-### ***Register User***
-
-`POST /api/auth/register`
-
-### **Request**
-```json
-{
-  "name": "Student One",
-  "email": "student@test.com",
-  "password": "123456",
-  "role": "student"
-}
-```
-
-### Login User
-
-`POST /api/auth/login`
-
-### **Response**
-```json
-{
-  "token": "jwt_token_here",
-  "user": {
-    "id": "...",
-    "name": "Student One",
-    "email": "student@test.com",
-    "role": "student"
-  }
-}
-```
-
-### 📚 Courses
-### ***Create Course (Instructor Only)***
-
-`POST /api/courses`
-
-Headers
-
-Authorization: Bearer <token>
-
-
-### **Request**
-```json
-{
-  "title": "React for Beginners",
-  "description": "Learn React from scratch",
-  "price": 1999,
-  "category": "Web Development",
-  "duration": "6 hours",
-  "level": "Beginner",
-  "videoUrl": "https://youtube.com/..."
-}
-```
-
-### ***Get All Courses***
-
-`GET /api/courses`
-
-### ***Get Single Course***
-
-`GET /api/courses/:courseId`
-
-### 🎓 Enrollment
-
-### ***Enroll in Course***
-
-`POST /api/enroll/:courseId`
-
-Headers
-
-Authorization: Bearer <token>
-
-### ***Get My Enrollments***
-
-`GET /api/enrollments`
-
-### 💳 Payments
- 
-### ***Create Checkout Session***
-
-`POST /api/payments/checkout`
-
-### **Request**
-```json
-{
-  "courseId": "COURSE_ID",
-  "title": "React for Beginners",
-  "price": 1999
-}
-```
-
-### ***Enrollment After Payment***
-
-`POST /api/enrollments/after-payment`
-
-### **Request**
-```json
-{
-  "courseId": "COURSE_ID"
-}
-```
-
-### 📈 Progress
-
-### ***Update Progress***
-
-`PATCH /api/progress/:courseId`
-
-### **Request**
-```json
-{
-  "completedPercentage": 50
-}
-```
 ---
 
 # 🏗️ System Architecture Diagram
@@ -290,6 +222,7 @@ Authorization: Bearer <token>
                      │ Users | Courses | Logs  │
                      └─────────────────────────┘
 ```
+---
 
 # ⚙️ Installation & Setup
 ## 🔽 Clone Repository
@@ -326,13 +259,29 @@ npm run dev
 npm start
 ```
 
+### 🤝 Contributing
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are greatly appreciated.
+
+1. Fork the Project
+2. Create your Feature Branch (git checkout -b feature/AmazingFeature)
+3. Commit your Changes (git commit -m 'Add some AmazingFeature')
+4. Push to the Branch (git push origin feature/AmazingFeature)
+5. Open a Pull Request
+
+
 # 🧑‍💻 Author
 
 Aditya
 Full Stack Developer
-GitHub: https://github.com/aditya32193213
+GitHub: aditya32193213
 
 # ⭐ Support
 
 If you like this project, please ⭐ star the repository.
 Your support helps me grow as a developer ✨
+
+# 📄 License
+Distributed under the MIT License. See LICENSE for more information.
+
+<p align="center"> Made with ❤️ by <a href="https://www.google.com/search?q=https://github.com/your-username">Aditya</a> </p>
+

@@ -1,9 +1,6 @@
 const Progress = require("../models/Progress");
 const Enrollment = require("../models/Enrollment");
 
-// =======================
-// GET PROGRESS BY COURSE
-// =======================
 exports.getProgressByCourse = async (req, res) => {
   try {
     if (req.user.role !== "student") {
@@ -27,9 +24,7 @@ exports.getProgressByCourse = async (req, res) => {
   }
 };
 
-// =======================
-// UPDATE PROGRESS
-// =======================
+
 exports.updateProgress = async (req, res) => {
   try {
     if (req.user.role !== "student") {
@@ -46,7 +41,6 @@ exports.updateProgress = async (req, res) => {
       Math.min(100, Number(completedPercentage))
     );
 
-    // ✅ Ensure user is enrolled
     const enrollment = await Enrollment.findOne({
       user: req.user.id,
       course: courseId,
@@ -64,7 +58,7 @@ exports.updateProgress = async (req, res) => {
         completedPercentage,
         lastAccessed: new Date(),
       },
-      { new: true } // ❌ removed upsert
+      { new: true } 
     );
 
     res.json(progress);

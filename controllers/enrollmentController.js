@@ -16,25 +16,21 @@ exports.enrollAfterPayment = async (req, res) => {
     const course = await Course.findById(courseId);
     if (!course) return res.status(404).json({ message: "Course not found" });
 
-    // Check duplicate
     const existingEnrollment = await Enrollment.findOne({ user: userId, course: courseId });
     if (existingEnrollment) {
       return res.status(409).json({ message: "Already enrolled", enrollment: existingEnrollment });
     }
 
-    // 1. Create Enrollment
     const enrollment = await Enrollment.create({
       user: userId,
       course: courseId,
       status: "active",
     });
 
-    // 2. ✅ FIX: Push User ID to Course's enrolledStudents array
     await Course.findByIdAndUpdate(courseId, {
       $addToSet: { enrolledStudents: userId }
     });
 
-    // 3. Initialize Progress
     await Progress.findOneAndUpdate(
       { user: userId, course: courseId },
       { $setOnInsert: { user: userId, course: courseId, completedPercentage: 0 } },
@@ -48,7 +44,6 @@ exports.enrollAfterPayment = async (req, res) => {
   }
 };
 
-// ... keep getMyEnrollments exactly as it was
 exports.getMyEnrollments = async (req, res) => {
   try {
     if (req.user.role !== "student") return res.status(403).json({ message: "Access denied" });

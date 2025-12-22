@@ -2,9 +2,7 @@ const Course = require("../models/Course");
 const User = require("../models/User");
 const Enrollment = require("../models/Enrollment");
 
-// =======================
-// GET ALL COURSES
-// =======================
+
 const getAllCourses = async (req, res) => {
   try {
     const { search } = req.query;
@@ -34,16 +32,13 @@ const getAllCourses = async (req, res) => {
   }
 };
 
-// =======================
-// GET MY COURSES (Instructor)
-// =======================
+
 const getMyCourses = async (req, res) => {
   try {
-    // 1. Get all courses by this instructor
+   
     const courses = await Course.find({ instructor: req.user.id }).lean();
 
-    // 2. Manual Lookup: Fetch students for each course directly from Enrollments
-    // This fixes the "missing students" issue by being the source of truth
+
     const coursesWithData = await Promise.all(
       courses.map(async (course) => {
         const enrollments = await Enrollment.find({ course: course._id })
@@ -53,7 +48,7 @@ const getMyCourses = async (req, res) => {
         
         return { 
           ...course, 
-          enrolledStudents: students // ✅ Now contains the actual list of students
+          enrolledStudents: students
         };
       })
     );
@@ -65,9 +60,7 @@ const getMyCourses = async (req, res) => {
   }
 };
 
-// =======================
-// GET COURSE BY ID
-// =======================
+
 const getCourseById = async (req, res) => {
   try {
     const course = await Course.findById(req.params.id)
@@ -84,9 +77,6 @@ const getCourseById = async (req, res) => {
   }
 };
 
-// =======================
-// CREATE COURSE 
-// =======================
 const createCourse = async (req, res) => {
   try {
     const course = await Course.create({
@@ -100,9 +90,7 @@ const createCourse = async (req, res) => {
   }
 };
 
-// =======================
-// UPDATE COURSE
-// =======================
+
 const updateCourse = async (req, res) => {
   try {
     const course = await Course.findByIdAndUpdate(
@@ -117,9 +105,7 @@ const updateCourse = async (req, res) => {
   }
 };
 
-// =======================
-// DELETE COURSE
-// =======================
+
 const deleteCourse = async (req, res) => {
   try {
     await Course.findByIdAndDelete(req.params.id);
@@ -132,7 +118,7 @@ const deleteCourse = async (req, res) => {
 
 module.exports = {
   getAllCourses,
-  getMyCourses, // ✅ Exported
+  getMyCourses,
   getCourseById,
   createCourse,
   updateCourse,

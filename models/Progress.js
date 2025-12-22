@@ -29,10 +29,6 @@ const progressSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-/**
- * 🔐 Prevent duplicate enrollment
- * One user can have only ONE progress record per course
- */
 progressSchema.index({ user: 1, course: 1 }, { unique: true });
 
 module.exports = mongoose.model("Progress", progressSchema);
