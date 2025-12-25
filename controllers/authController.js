@@ -42,31 +42,37 @@ const register = async (req, res) => {
   }
 };
 
+export const login = async (req, res) => {
+  let { email, password } = req.body;
+  email = email.toLowerCase();
 
-const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    
-    const { password: _, ...userData } = user._doc;
-
-    res.json({
-      token: generateToken(user),
-      user: userData,
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Login failed" });
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(400).json({ message: "Invalid credentials" });
   }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return res.status(400).json({ message: "Invalid credentials" });
+  }
+
+  const token = jwt.sign(
+    { id: user._id },
+    process.env.JWT_SECRET || "secret",
+    { expiresIn: "30d" }
+  );
+
+  // FIX: Added isAdmin to the response
+  res.json({
+    token,
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      isAdmin: user.isAdmin, 
+    },
+  });
 };
 
 
