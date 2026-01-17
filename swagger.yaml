@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
   title: EdTech Dashboard Backend API
-  description: REST API documentation for EdTech Dashboard (Auth, Courses, Enrollments, Payments, Progress)
+  description: Complete REST API documentation for EdTech Dashboard (Auth, Courses, Enrollments, Payments, Progress, AI Assistant)
   version: 1.0.0
 
 servers:
@@ -12,10 +12,17 @@ servers:
 
 tags:
   - name: Auth
+    description: Authentication and user profile management
   - name: Courses
+    description: Course management operations
   - name: Enrollments
+    description: Course enrollment operations
   - name: Payments
+    description: Payment and checkout operations
   - name: Progress
+    description: Course progress tracking
+  - name: AI Assistant
+    description: AI-powered learning assistant
 
 components:
   securitySchemes:
@@ -24,15 +31,80 @@ components:
       scheme: bearer
       bearerFormat: JWT
 
-security:
-  - bearerAuth: []
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        role:
+          type: string
+          enum: [student, instructor]
+
+    Course:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category:
+          type: string
+        duration:
+          type: string
+        level:
+          type: string
+        videoUrl:
+          type: string
+        instructor:
+          type: string
+
+    Enrollment:
+      type: object
+      properties:
+        _id:
+          type: string
+        user:
+          type: string
+        course:
+          type: string
+        enrolledAt:
+          type: string
+          format: date-time
+
+    Progress:
+      type: object
+      properties:
+        _id:
+          type: string
+        user:
+          type: string
+        course:
+          type: string
+        completedPercentage:
+          type: number
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
 
 paths:
-
+  # AUTH ROUTES
   /api/auth/register:
     post:
       tags: [Auth]
       summary: Register a new user
+      description: Create a new user account (student or instructor)
       requestBody:
         required: true
         content:
@@ -43,21 +115,49 @@ paths:
               properties:
                 name:
                   type: string
+                  example: John Doe
                 email:
                   type: string
+                  format: email
+                  example: john@example.com
                 password:
                   type: string
+                  format: password
+                  example: StrongPass123!
                 role:
                   type: string
                   enum: [student, instructor]
+                  example: student
       responses:
         201:
           description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  role:
+                    type: string
+                  token:
+                    type: string
+        400:
+          description: Bad request - validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /api/auth/login:
     post:
       tags: [Auth]
       summary: Login user
+      description: Authenticate user and receive JWT token
       requestBody:
         required: true
         content:
@@ -68,23 +168,122 @@ paths:
               properties:
                 email:
                   type: string
+                  format: email
+                  example: john@example.com
                 password:
                   type: string
+                  format: password
+                  example: StrongPass123!
       responses:
         200:
           description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  name:
+                    type: string
+                  email:
+                    type: string
+                  role:
+                    type: string
+                  token:
+                    type: string
+        401:
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
+  /api/auth/me:
+    get:
+      tags: [Auth]
+      summary: Get current user profile
+      description: Get logged-in user's profile information
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: User profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          description: Unauthorized - invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags: [Auth]
+      summary: Update user profile
+      description: Update logged-in user's profile information
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Updated
+                email:
+                  type: string
+                  format: email
+                  example: john.updated@example.com
+                password:
+                  type: string
+                  format: password
+                  example: NewPassword123!
+      responses:
+        200:
+          description: Profile updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # COURSE ROUTES
   /api/courses:
     get:
       tags: [Courses]
       summary: Get all courses
+      description: Retrieve a list of all available courses
       responses:
         200:
-          description: List of courses
+          description: List of courses retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
     post:
       tags: [Courses]
-      summary: Create course (Instructor only)
+      summary: Create a new course
+      description: Create a new course (Instructor only)
       security:
         - bearerAuth: []
       requestBody:
@@ -94,6 +293,122 @@ paths:
             schema:
               type: object
               required: [title, description, price]
+              properties:
+                title:
+                  type: string
+                  example: Complete React Course
+                description:
+                  type: string
+                  example: Learn React from scratch to advanced
+                price:
+                  type: number
+                  example: 49.99
+                category:
+                  type: string
+                  example: Web Development
+                duration:
+                  type: string
+                  example: 20 hours
+                level:
+                  type: string
+                  example: Intermediate
+                videoUrl:
+                  type: string
+                  example: https://example.com/video.mp4
+      responses:
+        201:
+          description: Course created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden - instructors only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/courses/my-courses:
+    get:
+      tags: [Courses]
+      summary: Get instructor's courses
+      description: Get all courses created by the logged-in instructor
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Instructor's courses retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Course'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden - instructors only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/courses/{id}:
+    get:
+      tags: [Courses]
+      summary: Get course by ID
+      description: Retrieve detailed information about a specific course
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Course ID
+      responses:
+        200:
+          description: Course details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        404:
+          description: Course not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      tags: [Courses]
+      summary: Update course
+      description: Update course details (Instructor only - own courses)
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Course ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
               properties:
                 title:
                   type: string
@@ -110,53 +425,80 @@ paths:
                 videoUrl:
                   type: string
       responses:
-        201:
-          description: Course created
+        200:
+          description: Course updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Course'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden - instructors only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Course not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/courses/{courseId}:
-    get:
+    delete:
       tags: [Courses]
-      summary: Get course by ID
+      summary: Delete course
+      description: Delete a course (Instructor only - own courses)
+      security:
+        - bearerAuth: []
       parameters:
-        - name: courseId
+        - name: id
           in: path
           required: true
           schema:
             type: string
+          description: Course ID
       responses:
         200:
-          description: Course details
+          description: Course deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Course deleted successfully
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        403:
+          description: Forbidden - instructors only
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Course not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/enroll/{courseId}:
-    post:
-      tags: [Enrollments]
-      summary: Enroll in a course
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: courseId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        201:
-          description: Enrolled successfully
-
-  /api/enrollments:
-    get:
-      tags: [Enrollments]
-      summary: Get logged-in user's enrollments
-      security:
-        - bearerAuth: []
-      responses:
-        200:
-          description: Enrollment list
-
+  # ENROLLMENT ROUTES
   /api/enrollments/after-payment:
     post:
       tags: [Enrollments]
-      summary: Enroll after Stripe payment
+      summary: Enroll in course after payment
+      description: Create enrollment after successful payment
       security:
         - bearerAuth: []
       requestBody:
@@ -169,16 +511,56 @@ paths:
               properties:
                 courseId:
                   type: string
+                  example: 507f1f77bcf86cd799439011
       responses:
         201:
           description: Enrollment successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Enrollment'
+        400:
+          description: Bad request - already enrolled or invalid course
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/payments/checkout:
+  /api/enrollments:
+    get:
+      tags: [Enrollments]
+      summary: Get user's enrollments
+      description: Get all courses the logged-in user is enrolled in
+      security:
+        - bearerAuth: []
+      responses:
+        200:
+          description: Enrollment list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Enrollment'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # PAYMENT ROUTES
+  /api/payments/create-checkout-session:
     post:
       tags: [Payments]
       summary: Create Stripe checkout session
-      security:
-        - bearerAuth: []
+      description: Create a Stripe checkout session for course payment
       requestBody:
         required: true
         content:
@@ -189,18 +571,44 @@ paths:
               properties:
                 courseId:
                   type: string
+                  example: 507f1f77bcf86cd799439011
                 title:
                   type: string
+                  example: Complete React Course
                 price:
                   type: number
+                  example: 49.99
       responses:
         200:
-          description: Stripe session created
+          description: Stripe session created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionId:
+                    type: string
+                  url:
+                    type: string
+        400:
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/progress/{courseId}:
-    patch:
+  # PROGRESS ROUTES
+  /api/progress/course/{courseId}:
+    get:
       tags: [Progress]
-      summary: Update course progress
+      summary: Get course progress
+      description: Get user's progress for a specific course
       security:
         - bearerAuth: []
       parameters:
@@ -209,6 +617,40 @@ paths:
           required: true
           schema:
             type: string
+          description: Course ID
+      responses:
+        200:
+          description: Progress retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Progress not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    patch:
+      tags: [Progress]
+      summary: Update course progress
+      description: Update user's progress for a specific course
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: courseId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Course ID
       requestBody:
         required: true
         content:
@@ -219,6 +661,73 @@ paths:
               properties:
                 completedPercentage:
                   type: number
+                  minimum: 0
+                  maximum: 100
+                  example: 75
       responses:
         200:
-          description: Progress updated
+          description: Progress updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Progress'
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        404:
+          description: Progress not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  # AI ASSISTANT ROUTES
+  /api/ai/chat:
+    post:
+      tags: [AI Assistant]
+      summary: Chat with AI Learning Assistant
+      description: Send a query to the AI-powered learning assistant (Google Gemini) and receive contextual recommendations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message:
+                  type: string
+                  example: Suggest my next course based on my progress
+                context:
+                  type: string
+                  example: User enrolled in React and Node courses with 80% completion
+      responses:
+        200:
+          description: AI-generated response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reply:
+                    type: string
+                    example: Based on your current skills in React and Node.js, learning MongoDB would be a great next step to build full-stack applications.
+        400:
+          description: Bad request - missing message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: AI service error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reply:
+                    type: string
+                    example: Sorry, I'm having trouble answering right now.

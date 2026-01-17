@@ -9,9 +9,11 @@ const enrollmentRoutes = require("./routes/enrollmentRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const progressRoutes = require("./routes/progressRoutes");
 const { swaggerUi, swaggerDocument } = require("./config/swagger");
+const aiRoutes = require("./routes/aiRoutes");
 
 dotenv.config();
 connectDB();
+console.log("Gemini Key Loaded:", process.env.GEMINI_API_KEY);
 
 const app = express();
 const allowedOrigins = ["http://localhost:3000", "https://edtech-dashboard-frontend.vercel.app"];
@@ -38,7 +40,9 @@ app.use("/api/courses", courseRoutes);
 app.use("/api/enrollments", enrollmentRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/progress", progressRoutes);
+app.use("/api/ai", aiRoutes);
 app.use("/api-docs",swaggerUi.serve,swaggerUi.setup(swaggerDocument));
+
 
 
 

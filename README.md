@@ -1,8 +1,8 @@
 # 🎓 LearnPro - Modern EdTech Learning Platform
 
-> **LearnPro** is a full-stack Learning Management System (LMS) designed to bridge the gap between instructors and students. It features a robust course marketplace, secure payments, video streaming, and role-based dashboards for a seamless educational experience.
+> **LearnPro** is a full-stack Learning Management System (LMS) designed to bridge the gap between instructors and students. It features a robust course marketplace, secure payments, video streaming,  role-based dashboards and an AI-powered Learning Assistant for a smarter educational experience .
 
-<p align="center"> <img src="https://img.shields.io/badge/Node.js-18-green?logo=node.js&logoColor=white" /> <img src="https://img.shields.io/badge/Express.js-Backend-black?logo=express&logoColor=white" /> <img src="https://img.shields.io/badge/MongoDB-Database-green?logo=mongodb" /> <img src="https://img.shields.io/badge/JWT-Authentication-blue" /> <img src="https://img.shields.io/badge/Stripe-Payments-purple?logo=stripe" /> <img src="https://img.shields.io/badge/Status-Production-success" /> </p>
+<p align="center"> <img src="https://img.shields.io/badge/Node.js-18-green?logo=node.js&logoColor=white" /> <img src="https://img.shields.io/badge/Express.js-Backend-black?logo=express&logoColor=white" /> <img src="https://img.shields.io/badge/MongoDB-Database-green?logo=mongodb" /> <img src="https://img.shields.io/badge/JWT-Authentication-blue" /> <img src="https://img.shields.io/badge/Stripe-Payments-purple?logo=stripe" /> <img src="https://img.shields.io/badge/Gemini-AI%20Assistant-orange" /> <img src="https://img.shields.io/badge/Status-Production-success" /> </p>
 
 # 
 
@@ -22,6 +22,7 @@
 * **Secure Enrollment:** Integrated Stripe payment gateway for seamless course purchasing.
 * **Interactive Learning:** Video player with "Mark as Watched" progress tracking.
 * **Dark Mode:** Fully responsive UI with a beautiful dark/light theme toggle.
+* **🤖 AI Learning Assistant:**Ask learning-related questions in natural language, get personalized course recommendations, guidance on next skills to learn and AI-driven career insights
 
 ### 👨‍🏫 For Instructors
 * **Instructor Dashboard:** Real-time analytics on earnings, total students, and course performance.
@@ -121,6 +122,26 @@ A robust Node.js & Express backend responsible for:
 
 Clean, predictable APIs designed for scalability and frontend integration.
 
+### 🤖 7.AI Learning Assistant (Gemini Integration)
+
+The platform includes an AI-powered chatbot built using Google Gemini API, acting as a virtual learning assistant.
+
+Key Capabilities:
+- Conversational Q&A for learners
+
+- Personalized recommendations such as:
+- “Next course to take”
+- “Skills to focus on”
+- Suggested learning paths based on user queries
+- Context-aware responses using:
+- User-provided learning context (e.g., enrolled technologies)
+- Real-time responses with graceful error handling
+
+Technical Details:
+- Model Used: gemini-2.5-flash
+- Integration Method: REST API (server-side)
+- Security: API key stored securely in backend environment variables
+
 ---
 
 ## 🛠️ Tech Stack
@@ -139,9 +160,10 @@ Clean, predictable APIs designed for scalability and frontend integration.
 * **Framework:** Express.js
 * **Database:** MongoDB & Mongoose
 * **Authentication:** JWT (JSON Web Tokens)
+* **HTTP Client:** Axios
 * **Payments:** Stripe API
 * **Security:** Bcrypt.js, CORS
-
+* **AI Assistant** Google Gemini API 
 ---
 
 # 🗂️ Folder Structure
@@ -167,6 +189,10 @@ learnpro/
 # 📡 API Documentation
 
 ## 🛣️ API Endpoints
+
+### 🤖 AI Assistant
+
+* POST /api/ai/chat – Chat with Gemini AI learning assistant
 
 ### 🔐 Authentication
 
@@ -243,6 +269,7 @@ PORT=10000
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 STRIPE_SECRET_KEY=your_stripe_secret
+GEMINI_API_KEY=your_google_gemini_api_key
 CLIENT_URL=http://localhost:3000
 ```
 
