@@ -5,12 +5,11 @@ const axios = require("axios");
  * Integrates with Google Gemini API for intelligent learning assistance
  */
 
-// ✅ FIX: Rate limiting to prevent Gemini API abuse
 let lastRequestTime = 0;
 const COOLDOWN_MS = 2000; // 2 seconds cooldown between requests
 
 const chatWithGemini = async (req, res) => {
-  // ✅ FIX: Enforce cooldown to prevent rate limit hits
+  
   const now = Date.now();
   if (now - lastRequestTime < COOLDOWN_MS) {
     return res.status(429).json({
@@ -65,7 +64,7 @@ Provide a helpful, contextually relevant response based on the above information
 
     // Call Gemini API with enhanced configuration
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-exp:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         contents: [
           {
@@ -133,7 +132,6 @@ Provide a helpful, contextually relevant response based on the above information
       code: error.code
     });
 
-    // ✅ FIX: Enhanced error handling with clearer responses
     
     // Timeout errors
     if (error.code === 'ECONNABORTED') {
