@@ -53,6 +53,8 @@ const chatWithGemini = async (req, res) => {
 - Always end with a follow-up question or offer of additional help
 - Never make up course names or data not in the context
 - When recommending courses, always provide at least one concrete next-step suggestion before ending the response.
+- When listing available courses, always provide example categories or popular courses and end with clear navigation guidance.
+
 
 
 **Context Information:**
