@@ -57,6 +57,7 @@ const chatWithGemini = async (req, res) => {
 - When explaining platform features, ensure all listed points are fully completed before ending the response.
 
 
+
 **Context Information:**
 ${context || "No user context available - treat as guest user"}
 
