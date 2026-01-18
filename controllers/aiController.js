@@ -76,7 +76,7 @@ Provide a helpful, contextually relevant response based on the above information
           temperature: 0.7,
           topK: 40,
           topP: 0.95,
-          maxOutputTokens: 500,
+          maxOutputTokens: 1024,
         },
         safetySettings: [
           {
