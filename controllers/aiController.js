@@ -5,7 +5,21 @@ const axios = require("axios");
  * Integrates with Google Gemini API for intelligent learning assistance
  */
 
+// ✅ FIX: Rate limiting to prevent Gemini API abuse
+let lastRequestTime = 0;
+const COOLDOWN_MS = 2000; // 2 seconds cooldown between requests
+
 const chatWithGemini = async (req, res) => {
+  // ✅ FIX: Enforce cooldown to prevent rate limit hits
+  const now = Date.now();
+  if (now - lastRequestTime < COOLDOWN_MS) {
+    return res.status(429).json({
+      reply: "Please wait a moment before sending another message 🙏",
+      error: "COOLDOWN"
+    });
+  }
+  lastRequestTime = now;
+
   try {
     const { message, context } = req.body;
 
@@ -119,7 +133,9 @@ Provide a helpful, contextually relevant response based on the above information
       code: error.code
     });
 
-    // Detailed error handling
+    // ✅ FIX: Enhanced error handling with clearer responses
+    
+    // Timeout errors
     if (error.code === 'ECONNABORTED') {
       return res.status(504).json({
         reply: "The request took too long. Please try again with a simpler question. ⏱️",
@@ -127,6 +143,7 @@ Provide a helpful, contextually relevant response based on the above information
       });
     }
 
+    // Rate limit errors (from Gemini)
     if (error.response?.status === 429) {
       return res.status(429).json({
         reply: "I'm getting a lot of questions right now. Please wait a moment and try again. 🙏",
@@ -134,14 +151,16 @@ Provide a helpful, contextually relevant response based on the above information
       });
     }
 
+    // Authentication errors
     if (error.response?.status === 401 || error.response?.status === 403) {
-      console.error("🔑 API Key Issue - Check GEMINI_API_KEY in .env");
+      console.error("🔒 API Key Issue - Check GEMINI_API_KEY in .env");
       return res.status(500).json({
         reply: "I'm having trouble connecting right now. Our team has been notified. 🔧",
         error: "AUTH_ERROR"
       });
     }
 
+    // Server errors from Gemini
     if (error.response?.status >= 500) {
       return res.status(503).json({
         reply: "The AI service is temporarily unavailable. Please try again in a moment. 🔄",
