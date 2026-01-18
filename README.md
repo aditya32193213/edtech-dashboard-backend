@@ -1,255 +1,339 @@
-# 🎓 LearnPro - Modern EdTech Learning Platform
+# 🎓 LearnPro — EdTech Dashboard (Frontend)
 
-> **LearnPro** is a full-stack Learning Management System (LMS) designed to bridge the gap between instructors and students. It features a robust course marketplace, secure payments, video streaming, role-based dashboards, and an AI-powered Learning Assistant for a smarter educational experience.
+> A modern, responsive EdTech dashboard built with **React**, featuring authentication, course enrollment, progress tracking, dark mode, and comprehensive user profiles.
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Node.js-18-green?logo=node.js&logoColor=white" />
-  <img src="https://img.shields.io/badge/Express.js-Backend-black?logo=express&logoColor=white" />
-  <img src="https://img.shields.io/badge/MongoDB-Database-green?logo=mongodb" />
-  <img src="https://img.shields.io/badge/JWT-Authentication-blue" />
-  <img src="https://img.shields.io/badge/Stripe-Payments-purple?logo=stripe" />
-  <img src="https://img.shields.io/badge/Gemini-AI%20Assistant-orange" />
+  <img src="https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css&logoColor=white" />
+  <img src="https://img.shields.io/badge/React_Router-v6-CA4245?logo=react-router&logoColor=white" />
+  <img src="https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel" />
+  <img src="https://img.shields.io/badge/Google_Analytics-GA4-E37400?logo=google-analytics" />
   <img src="https://img.shields.io/badge/Sentry-Monitoring-362D59?logo=sentry" />
-  <img src="https://img.shields.io/badge/Status-Production-success" />
+  <img src="https://img.shields.io/badge/Status-Live-success" />
 </p>
 
 ---
 
-## 🌐 Live Demo & API
+## 🌐 Live Demo
 
-* 🔗 **Frontend Demo:** [https://edtech-dashboard-frontend.vercel.app/](https://edtech-dashboard-frontend.vercel.app/)
-* 🔗 **Backend API:** [https://edtech-dashboard-backend.onrender.com/](https://edtech-dashboard-backend.onrender.com/)
-* 📚 **Swagger Docs:** [https://edtech-dashboard-backend.onrender.com/api-docs/](https://edtech-dashboard-backend.onrender.com/api-docs/)
+🔗 **Live URL:** [https://edtech-dashboard-frontend.vercel.app/](https://edtech-dashboard-frontend.vercel.app/)
+
+🎥 **Demo Video:** [Watch on Google Drive](https://drive.google.com/file/d/1iYq5c36Uf5TnRDTsTJKlU4racMxGCuRc/view?usp=sharing)
 
 ---
 
-## ✨ Key Features
+## 🚀 Features
 
-### 🔐 Authentication & Security
-* ✅ **User Registration & Login**: Secure access for both Students and Instructors
-* 🔑 **JWT Authentication**: Stateless authentication mechanism
-* 🛡️ **Role-Based Access Control (RBAC)**: Distinct permissions for Students vs. Instructors
-* 🔒 **Secure Routes**: Middleware protection for private API endpoints
-* 🌐 **Environment-Based Configuration**: Secure `.env` management
+### 🔐 Authentication & User Management
+* ✅ **Signup / Login / Logout**: Secure user authentication
+* 👤 **User Profile Management**: Edit and view personal information
+* 🔒 **Protected Routes**: Redirect to login with memory of intended destination
+* 💾 **LocalStorage Persistence**: Seamless session management
 
-### 👨‍🎓 For Students
-* 🔍 **Course Discovery**: Advanced search and filtering by category, level, and popularity
-* 📊 **Student Dashboard**: Personalized learning path, progress tracking, and achievements
-* 💳 **Secure Enrollment**: Integrated Stripe payment gateway for seamless course purchasing
-* 🎥 **Interactive Learning**: Video player with "Mark as Watched" progress tracking
-* 🌓 **Dark Mode**: Fully responsive UI with beautiful dark/light theme toggle
-* 🤖 **AI Learning Assistant**: 
-  - Ask learning-related questions in natural language
-  - Get personalized course recommendations
-  - Receive guidance on next skills to learn
-  - AI-driven career insights powered by Google Gemini API
+### 📚 Course Management
+* 🔍 **Course Browsing**: Advanced search and filtering capabilities
+* 🎯 **Course Enrollment**: Easy one-click enrollment system
+* 📊 **Progress Tracking**: Per-user course completion tracking
+* 📈 **Learning Dashboard**: Personalized learning statistics and insights
 
-### 👨‍🏫 For Instructors
-* 📈 **Instructor Dashboard**: Real-time analytics on earnings, total students, and course performance
-* 📝 **Course Management**: Create, edit, and delete courses with ease
-* 🎬 **Content Creation**: Add video lectures, thumbnails, and detailed descriptions
-* 👥 **Student Insights**: View enrollment data for specific courses
+### 🎨 User Experience
+* 🌙 **Dark Mode**: Global dark/light theme toggle
+* 🔔 **Toast Notifications**: Real-time feedback with react-hot-toast
+* ⏳ **Skeleton Loaders**: Beautiful loading states for better UX
+* 📱 **Responsive UI**: Fully optimized for all devices
+* ⚡ **Performance-Optimized**: Lazy-loaded images and optimized DOM
 
-### 🤖 AI-Powered Learning Assistant (Gemini Integration)
-
-The platform includes an intelligent chatbot built using **Google Gemini API**, acting as a virtual learning assistant.
-
-**🌟 Key Capabilities:**
-- 💬 Conversational Q&A for learners
-- 🎯 Personalized recommendations:
-  - "Next course to take"
-  - "Skills to focus on"
-  - Suggested learning paths based on user queries
-- 🧠 Context-aware responses using user-provided learning context
-- ⚡ Real-time responses with graceful error handling
-
-**🔧 Technical Details:**
-- 🤖 **Model Used**: `gemini-2.5-flash`
-- 🔌 **Integration Method**: REST API (server-side)
-- 🔐 **Security**: API key stored securely in backend environment variables
-- 📡 **Endpoint**: `POST /api/chat` or `POST /api/ai/chat`
-
-### 🛡️ Monitoring & Error Tracking
-* 📊 **Sentry Integration**: Backend error tracking and monitoring
-* 🐛 **Stack Traces**: File and line number debugging
-* 🚨 **Production Issue Detection**: Real-time crash reporting
-* 🔍 **Debug Endpoint**: `/debug-sentry` for testing error logging
-
-### ☁️ Cloud Infrastructure
-* 🚀 **Deployed on Render**: Auto-deploy from GitHub
-* 🌍 **MongoDB Atlas**: Scalable cloud database
-* 🔄 **CI/CD Pipeline**: Automatic deployments
-* 🔐 **Secure Environment Variables**: Production-grade configuration
+### 📊 Analytics & Monitoring
+* 📈 **Google Analytics (GA4)**: Comprehensive user behavior tracking
+* 🛡️ **Sentry Frontend**: Production crash monitoring and error tracking
+* 🔍 **Real-time Insights**: User engagement and performance metrics
 
 ---
 
 ## 🛠️ Tech Stack
 
-### **Frontend (Client)**
-* ⚛️ **Framework:** React.js (Vite)
-* 🎨 **Styling:** Tailwind CSS
-* 🛣️ **Routing:** React Router DOM v6
-* 🔄 **State Management:** React Hooks (Context API)
-* 📡 **HTTP Client:** Axios
-* 🎭 **Icons:** Heroicons / Lucide React
-* 🔔 **Notifications:** React Hot Toast
+### **Frontend Framework**
+* ⚛️ **React 18**: Modern React with hooks
+* 🛣️ **React Router v6**: Client-side routing
+* 🎨 **Tailwind CSS**: Utility-first styling framework
 
-### **Backend (Server)**
-* 🟢 **Runtime:** Node.js 18
-* 🚂 **Framework:** Express.js
-* 🍃 **Database:** MongoDB & Mongoose
-* 🔑 **Authentication:** JWT (JSON Web Tokens)
-* 📡 **HTTP Client:** Axios
-* 💳 **Payments:** Stripe API
-* 🔒 **Security:** Bcrypt.js, CORS
-* 🤖 **AI Assistant:** Google Gemini API
-* 📦 **Environment:** dotenv
-* 🛡️ **Monitoring:** Sentry
+### **State & Storage**
+* 💾 **LocalStorage**: Client-side data persistence
+* 🔄 **React State**: Component-level state management
 
-### **DevOps & Deployment**
-* ☁️ **Frontend Hosting:** Vercel
-* ☁️ **Backend Hosting:** Render
-* 🗄️ **Database:** MongoDB Atlas
-* 📚 **API Docs:** Swagger/OpenAPI
+### **UI & Notifications**
+* 🔔 **react-hot-toast**: Toast notifications
+* 🎭 **Custom Components**: Reusable UI components
+* 🖼️ **Lazy Loading**: Optimized image loading
+
+### **Analytics & Monitoring**
+* 📊 **Google Analytics (GA4)**: User behavior tracking
+* 🛡️ **Sentry**: Frontend error monitoring
+
+### **Deployment & Performance**
+* ☁️ **Vercel**: CI/CD enabled deployment
+* 🚀 **CDN-based Assets**: Fast global delivery
+* ⚡ **Performance Optimized**: Lighthouse audited
 
 ---
 
-## 🗂️ Folder Structure
+## 📊 Performance Metrics
+
+### 🏆 Lighthouse Scores
+
+| Metric | Score |
+|--------|-------|
+| ⚡ **Performance** | 88 |
+| ♿ **Accessibility** | 87 |
+| ✅ **Best Practices** | 77 |
+| 🔍 **SEO** | 92 |
+
+### ⚡ Performance Optimizations
+
+* 🚀 **Lazy-loaded Course Images**: Reduced initial load time
+* 🚀 **Optimized DOM Size**: Efficient rendering
+* 🚀 **CDN-based Asset Delivery**: Vercel edge network
+* 🚀 **Code Splitting**: React Router lazy loading
+* 🚀 **Lighthouse Audited**: Continuous performance monitoring
+
+---
+
+## 📂 Project Structure
 
 ```plaintext
-learnpro/
-├── backend/
-│   ├── config/         # DB connection & environment setup
-│   ├── controllers/    # Route logic (Auth, Course, Enrollment, Chat)
-│   │   └── chat.controller.js
-│   ├── models/         # Mongoose Schemas (User, Course, Progress)
-│   │   └── Course.js
-│   ├── routes/         # API Routes
-│   │   ├── chat.routes.js
-│   │   └── course.routes.js
-│   ├── middleware/     # Auth & Role middleware
-│   ├── instrument.js   # Sentry initialization
-│   ├── server.js       # App entry point
-│   └── .env           # Environment variables
+learnpro-edtech-frontend/
 │
-├── frontend/
-│   ├── src/
-│   │   ├── components/ # Reusable UI (Navbar, Cards, Loaders)
-│   │   ├── pages/      # Views (Dashboard, Login, CourseDetails)
-│   │   ├── services/   # API calls (Axios instances)
-│   │   └── utils/      # Helpers (Auth, Formatting)
-│   └── public/         # Static assets
+├── public/
+│   ├── index.html              # Main HTML file
+│   ├── logo112.png             # App logo
+│   └── manifest.json           # PWA manifest
+│
+├── src/
+│   ├── assets/                 # Images, icons, static files
+│   │
+│   ├── components/             # Reusable UI Components
+│   │   ├── CourseCard.jsx      # Course display card
+│   │   ├── CourseDetailsSkeleton.jsx  # Loading skeleton
+│   │   ├── Footer.jsx          # App footer
+│   │   └── Navbar.jsx          # Navigation bar
+│   │
+│   ├── pages/                  # Application Pages (Routes)
+│   │   ├── About.jsx           # About page
+│   │   ├── CourseDetails.jsx   # Individual course view
+│   │   ├── Courses.jsx         # All courses listing
+│   │   ├── Dashboard.jsx       # User dashboard
+│   │   ├── Home.jsx            # Landing page
+│   │   ├── Login.jsx           # Login page
+│   │   ├── NotFound.jsx        # 404 error page
+│   │   ├── Profile.jsx         # User profile
+│   │   └── Signup.jsx          # Registration page
+│   │
+│   ├── routes/                 # Routing Configuration
+│   │   └── ProtectedRoutes.jsx # Route protection logic
+│   │
+│   ├── utils/                  # Helper Functions
+│   │   └── auth.js             # Authentication utilities
+│   │
+│   ├── App.css                 # Global styles
+│   ├── App.jsx                 # Main app component
+│   ├── index.css               # Tailwind imports
+│   ├── index.js                # App entry point
+│   └── setupTests.js           # Test configuration
+│
+├── screenshots/                # App screenshots
+│   ├── Homepage.png
+│   ├── Dashboard.png
+│   ├── Loginpage.png
+│   ├── Coursepage.png
+│   ├── Profilepage.png
+│   ├── course-details.png
+│   ├── analytics-active.png
+│   └── lighthouse-performance.png
+│
+├── .gitignore                  # Git ignore rules
+├── package.json                # Dependencies
+├── package-lock.json           # Locked dependencies
+├── postcss.config.js           # PostCSS configuration
+├── tailwind.config.js          # Tailwind configuration
+└── README.md                   # This file
 ```
 
 ---
 
-## 🔌 API Documentation
+## 📁 Folder Overview
 
-### 🤖 AI Assistant
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `POST` | `/api/chat` or `/api/ai/chat` | Chat with Gemini AI learning assistant | ✅ |
-
-**Request Body:**
-```json
-{
-  "message": "Suggest my next course"
-}
-```
-
-**Response:**
-```json
-{
-  "reply": "Based on your progress, I recommend..."
-}
-```
-
-### 🔐 Authentication
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/auth/register` | Register a new user (Student/Instructor) |
-| `POST` | `/api/auth/login` | Login user & return JWT |
-
-### 📚 Courses
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `GET` | `/api/courses` | Fetch all courses (with filters) | ❌ |
-| `GET` | `/api/courses/:id` | Get single course details | ❌ |
-| `POST` | `/api/courses` | Create a new course | ✅ Instructor |
-| `PUT` | `/api/courses/:id` | Update a course | ✅ Instructor |
-| `DELETE` | `/api/courses/:id` | Delete a course | ✅ Instructor |
-
-### 🎓 Enrollment
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `POST` | `/api/enrollment/checkout` | Create Stripe checkout session | ✅ |
-| `POST` | `/api/enrollment/verify` | Verify payment & enroll user | ✅ |
-| `GET` | `/api/enrollment/my-enrollments` | Get logged-in user's courses | ✅ |
-
-### 💳 Payments
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `POST` | `/api/payments/checkout` | Create Checkout Session | ✅ |
-| `POST` | `/api/enrollments/after-payment` | Enrollment After Payment | ✅ |
-
-### 📈 Progress
-
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| `PATCH` | `/api/progress/:courseId` | Update course progress | ✅ |
-
-### 🛡️ Monitoring
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/debug-sentry` | Test Sentry error logging |
+| Folder | Description |
+|--------|-------------|
+| 📦 **components/** | Reusable UI components (Navbar, Footer, Cards, Loaders) |
+| 📄 **pages/** | Application pages mapped to routes |
+| 🛣️ **routes/** | Protected routing logic and route guards |
+| 🔧 **utils/** | Authentication helpers and utility functions |
+| 🎨 **assets/** | Static images, icons, and media files |
 
 ---
 
-## 📘 Interactive API Documentation
-
-Full interactive API documentation is available via Swagger:
-
-🔗 **[https://edtech-dashboard-backend.onrender.com/api-docs/](https://edtech-dashboard-backend.onrender.com/api-docs/)**
-
----
-
-## 🗃️ System Architecture
+## 🗃️ System Architecture Diagram
 
 ```plaintext
-                ┌──────────────────────────────┐
-                │   Frontend (React.js)        │
-                │   Auth | Courses | Dashboard │
-                │   AI Chat | Dark Mode        │
-                └──────────────┬───────────────┘
-                               │
-                               ▼
-                  ┌────────────────────────────┐
-                  │ Backend (Node + Express)   │
-                  │ Auth | Courses | Payments  │
-                  │ AI Chat (Gemini) | Sentry  │
-                  └──────────────┬─────────────┘
-                                 │
-                ┌────────────────┼────────────────┐
-                │                │                │
-                ▼                ▼                ▼
-       ┌─────────────┐  ┌──────────────┐  ┌─────────────┐
-       │  MongoDB     │  │ Stripe API   │  │ Gemini API  │
-       │  Atlas       │  │ (Payments)   │  │ (AI Chat)   │
-       │ Users|Course │  └──────────────┘  └─────────────┘
-       └─────────────┘
+┌───────────────────────────────┐
+│       User (Browser)          │
+└───────────────┬───────────────┘
                 │
                 ▼
-       ┌─────────────┐
-       │   Sentry    │
-       │ (Monitoring)│
-       └─────────────┘
+┌──────────────────────────────────────────┐
+│          React SPA (LearnPro)            │
+│                                          │
+│  ┌──────────────┐   ┌─────────────────┐ │
+│  │   App.jsx    │──▶│ React Router    │ │
+│  │              │   │ (Routes Layer)  │ │
+│  └──────────────┘   └─────────────────┘ │
+│              │                           │
+│              ▼                           │
+│  ┌───────────────────────────────────┐  │
+│  │          Pages Layer              │  │
+│  │  Home | Courses | CourseDetails   │  │
+│  │  Login | Signup | Dashboard       │  │
+│  │  Profile | About | NotFound       │  │
+│  └───────────────────────────────────┘  │
+│              │                           │
+│              ▼                           │
+│  ┌────────────────────────────────────┐ │
+│  │        Components Layer            │ │
+│  │  Navbar | Footer | CourseCard      │ │
+│  │  Loader | Skeleton | ProtectedRoute│ │
+│  └────────────────────────────────────┘ │
+│              │                           │
+│              ▼                           │
+│  ┌───────────────────────────────────┐  │
+│  │        Utils / State Layer        │  │
+│  │  auth.js                          │  │
+│  │  • signupUser                     │  │
+│  │  • loginUser                      │  │
+│  │  • logoutUser                     │  │
+│  │  • getUser / isAuthenticated      │  │
+│  └───────────────────────────────────┘  │
+│              │                           │
+│              ▼                           │
+│  ┌───────────────────────────────────┐  │
+│  │      Browser Storage Layer        │  │
+│  │  localStorage                     │  │
+│  │  • users                          │  │
+│  │  • currentUser                    │  │
+│  │  • enrolledCourses_<email>        │  │
+│  │  • courseProgress_<email>         │  │
+│  └───────────────────────────────────┘  │
+└──────────────────────────────────────────┘
+                │
+                ▼
+        ┌───────────────┐
+        │  External     │
+        │  Services     │
+        ├───────────────┤
+        │ • Google      │
+        │   Analytics   │
+        │ • Sentry      │
+        │ • Backend API │
+        └───────────────┘
 ```
+
+---
+
+## 🔐 Authentication Logic
+
+### 🔑 How It Works
+
+1. **User Registration**
+   - Users stored in LocalStorage under `users` key
+   - Password hashing (client-side)
+   - Email validation
+
+2. **User Login**
+   - Credential verification against LocalStorage
+   - JWT-like session token generation
+   - Current user stored in `currentUser` key
+
+3. **Per-User Data**
+   - Enrollments: `enrolledCourses_<email>`
+   - Progress: `courseProgress_<email>`
+   - Personalized dashboard data
+
+4. **Protected Routes**
+   - Redirect to login if not authenticated
+   - Memory of intended destination
+   - Auto-redirect after successful login
+
+5. **Logout**
+   - Clears `currentUser` from LocalStorage
+   - Preserves user account data
+   - Redirects to homepage
+
+---
+
+## 🧪 Demo Credentials
+
+🆕 **Create Your Own Account**  
+Use the Signup page to create a new account with your email and password.
+
+🔓 **Test Credentials**  
+You can create and use any test credentials for demonstration purposes.
+
+---
+
+## 📸 Screenshots
+
+### 🏠 Homepage
+![Homepage Screenshot](./screenshots/Homepage.png)
+
+The landing page introduces **LearnPro**, showcasing featured courses, platform statistics, and clear navigation for learners.
+
+---
+
+### 📊 Dashboard
+![Dashboard Screenshot](./screenshots/Dashboard.png)
+
+The personalized dashboard displays enrolled courses, learning progress, statistics, and the learner's activity streak.
+
+---
+
+### 🔐 Login Page
+![Login Page Screenshot](./screenshots/Loginpage.png)
+
+Secure authentication page allowing users to log in using saved credentials with validation and toast feedback.
+
+---
+
+### 📚 Courses Page
+![Courses Page Screenshot](./screenshots/Coursepage.png)
+
+Browse all available courses with filtering, search functionality, and detailed course information.
+
+---
+
+### 👤 Profile Page
+![Profile Page Screenshot](./screenshots/Profilepage.png)
+
+The profile page allows users to view and update their personal information, manage account details, and securely log out of the application.
+
+---
+
+### 📘 Course Details Page
+![Course Details Screenshot](./screenshots/course-details.png)
+
+Detailed course view including instructor info, syllabus highlights, enrollment status, and protected enroll functionality.
+
+---
+
+### 📊 Google Analytics Dashboard
+![Google Analytics Screenshot](./screenshots/analytics-active.png)
+
+Real-time user behavior tracking and engagement metrics powered by Google Analytics (GA4).
+
+---
+
+### ⚡ Lighthouse Performance Score
+![Lighthouse Score Screenshot](./screenshots/lighthouse-performance.png)
+
+Performance audit showing excellent scores across all metrics: Performance (88), Accessibility (87), Best Practices (77), and SEO (92).
 
 ---
 
@@ -258,8 +342,8 @@ Full interactive API documentation is available via Swagger:
 ### 📥 Clone Repository
 
 ```bash
-git clone https://github.com/aditya32193213/edtech-dashboard-backend.git
-cd edtech-dashboard-backend
+git clone https://github.com/aditya32193213/edtech-dashboard.git
+cd edtech-dashboard-frontend
 ```
 
 ### 📦 Install Dependencies
@@ -273,107 +357,147 @@ npm install
 Create a `.env` file in the root directory:
 
 ```env
-# Server Configuration
-PORT=10000
+# Stripe Integration
+REACT_APP_STRIPE_PUBLIC_KEY=your_stripe_public_key
 
-# Database
-MONGO_URI=your_mongodb_atlas_connection_string
+# Backend API URL
+REACT_APP_API_BASE_URL=https://edtech-dashboard-backend.onrender.com/api
 
-# Authentication
-JWT_SECRET=your_jwt_secret_key
+# Sentry Monitoring
+REACT_APP_SENTRY_DSN=your_frontend_sentry_dsn
 
-# Payment Gateway
-STRIPE_SECRET_KEY=your_stripe_secret_key
-
-# AI Assistant
-GEMINI_API_KEY=your_google_gemini_api_key
-
-# Frontend URL
-CLIENT_URL=http://localhost:3000
-
-# Monitoring
-SENTRY_DSN=your_backend_sentry_dsn
+# Google Analytics (Optional)
+REACT_APP_GA_TRACKING_ID=your_ga4_tracking_id
 ```
 
-### ▶️ Run Server
+### ▶️ Run Development Server
 
-**Development Mode:**
-```bash
-npm run dev
-```
-
-**Production Mode:**
 ```bash
 npm start
 ```
 
-🌍 Server runs on: `http://localhost:10000`
+🌍 App runs on: `http://localhost:3000`
+
+### 🏗️ Build for Production
+
+```bash
+npm run build
+```
+
+### 🚀 Deploy to Vercel
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+```
 
 ---
 
 ## 🧪 Testing
 
-### 🔧 Test with Postman
+### 🔍 Run Tests
 
-1. **AI Chat Endpoint**
-   ```
-   POST http://localhost:10000/api/chat
-   Body: { "message": "What should I learn next?" }
-   ```
+```bash
+npm test
+```
 
-2. **Sentry Error Logging**
-   ```
-   GET http://localhost:10000/debug-sentry
-   ```
+### 📊 Check Coverage
 
-3. **Course Listing**
-   ```
-   GET http://localhost:10000/api/courses
-   ```
+```bash
+npm run test:coverage
+```
 
 ---
 
-## 📊 Monitoring & Performance
+## 📌 Future Enhancements
+
+### 🚀 Planned Features
+
+* 🔗 **Full Backend Integration**: Connect to Node.js + MongoDB backend
+* 🎥 **Real Video Progress**: Track actual video playback progress
+* 👨‍💼 **Admin Dashboard**: Course management and user analytics
+* 💳 **Payment Gateway**: Complete Stripe integration for paid courses
+* 📜 **Certificate Download**: Auto-generated certificates on course completion
+* 📱 **Mobile App**: React Native version for iOS and Android
+* 🌐 **Internationalization**: Multi-language support
+* 🔔 **Push Notifications**: Real-time course updates
+* 💬 **Live Chat Support**: In-app messaging system
+* 🎓 **Quiz System**: Interactive assessments and exams
+
+---
+
+## 🛡️ Monitoring & Analytics
+
+### 📊 Google Analytics (GA4)
+
+LearnPro uses **Google Analytics 4** for comprehensive tracking:
+
+- 👥 **User Engagement**: Page views, session duration, bounce rates
+- 🎯 **Conversion Tracking**: Course enrollments, signup completions
+- 📈 **Real-time Analytics**: Live user activity monitoring
+- 🌍 **Geographic Insights**: User location and demographics
+- 📱 **Device Analytics**: Desktop vs mobile usage patterns
 
 ### 🛡️ Sentry Integration
 
-LearnPro uses **Sentry** for comprehensive error tracking:
+**Sentry** provides production error monitoring:
 
-- 🐛 **Runtime Crash Detection**: Captures unhandled exceptions
-- 📍 **Stack Traces**: File and line number debugging
-- 🚨 **Real-time Alerts**: Instant notifications for production issues
-- 📈 **Performance Monitoring**: Track API response times
-- 🔍 **Debug Endpoint**: `/debug-sentry` for testing
+- 🐛 **Error Tracking**: Capture runtime errors and exceptions
+- 📍 **Source Maps**: Precise error location in production code
+- 🚨 **Real-time Alerts**: Instant notifications for critical issues
+- 📊 **Performance Monitoring**: Track slow components and API calls
+- 🔍 **Session Replay**: Visual reproduction of user sessions with errors
 
-### ✅ Production-Ready Features
+---
 
-- ✔️ Cloud deployed on Render
-- ✔️ Auto-deploy from GitHub
-- ✔️ Environment-based configuration
-- ✔️ Centralized error handling
-- ✔️ MongoDB Atlas persistence
-- ✔️ Secure API endpoints
-- ✔️ Performance optimized
-- ✔️ Portfolio-grade quality
+## ☁️ Deployment
+
+### 🚀 Vercel Deployment
+
+LearnPro is deployed on **Vercel** with the following benefits:
+
+* ✅ **Automatic CI/CD**: Git push triggers automatic deployment
+* 🌐 **Global CDN**: Fast content delivery worldwide
+* 🔒 **HTTPS by Default**: Automatic SSL certificates
+* 📊 **Analytics Built-in**: Performance and visitor insights
+* 🔄 **Preview Deployments**: Test branches before merging
+* ⚡ **Edge Network**: Optimized for React applications
+
+**Deployment Steps:**
+1. Push code to GitHub
+2. Connect repository to Vercel
+3. Configure environment variables
+4. Deploy automatically on every push
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+Contributions are welcome! Here's how you can help:
 
-1. 🍴 Fork the Project
-2. 🌿 Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. 💾 Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. 📤 Push to the Branch (`git push origin feature/AmazingFeature`)
-5. 🔃 Open a Pull Request
+1. 🍴 **Fork the Repository**
+2. 🌿 **Create a Feature Branch** (`git checkout -b feature/AmazingFeature`)
+3. 💾 **Commit Your Changes** (`git commit -m 'Add some AmazingFeature'`)
+4. 📤 **Push to the Branch** (`git push origin feature/AmazingFeature`)
+5. 🔃 **Open a Pull Request**
+
+### 📋 Contribution Guidelines
+
+* Write clean, documented code
+* Follow existing code style
+* Add tests for new features
+* Update README for significant changes
+* Ensure all tests pass before PR
 
 ---
 
 ## 🧑‍💻 Author
 
 **Aditya**  
-🚀 Full Stack Developer | Cloud & AI Systems  
+🚀 Full Stack Developer | React Specialist | EdTech Enthusiast  
 🔗 GitHub: [@aditya32193213](https://github.com/aditya32193213)
 
 ---
@@ -393,12 +517,20 @@ Distributed under the **MIT License**. See `LICENSE` for more information.
 
 ## 🙏 Acknowledgments
 
-* 🤖 Google Gemini API for AI capabilities
-* 💳 Stripe for secure payment processing
-* 🛡️ Sentry for error monitoring
-* ☁️ Render & Vercel for hosting
-* 🍃 MongoDB Atlas for database
-* 💎 React & Tailwind CSS communities
+* ⚛️ **React Team** for the amazing framework
+* 🎨 **Tailwind CSS** for the utility-first approach
+* 📊 **Google Analytics** for analytics platform
+* 🛡️ **Sentry** for error monitoring
+* ☁️ **Vercel** for seamless deployment
+* 💳 **Stripe** for payment processing
+
+---
+
+## 📞 Contact & Support
+
+* 🐛 **Report Issues**: [GitHub Issues](https://github.com/aditya32193213/edtech-dashboard/issues)
+* 💬 **Discussions**: [GitHub Discussions](https://github.com/aditya32193213/edtech-dashboard/discussions)
+* 📧 **Email**: Contact via GitHub profile
 
 ---
 
