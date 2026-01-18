@@ -42,7 +42,7 @@ const chatWithGemini = async (req, res) => {
 **Tone & Style:**
 - Friendly, encouraging, and professional
 - Use emojis sparingly (1-2 per response) for warmth
-- Keep responses concise (2-4 sentences for simple queries)
+- Keep responses clear and well-structured, with enough detail to be helpful
 - Provide actionable advice
 - Be enthusiastic about learning
 
