@@ -52,6 +52,8 @@ const chatWithGemini = async (req, res) => {
 - When recommending courses, consider their current skill level
 - Always end with a follow-up question or offer of additional help
 - Never make up course names or data not in the context
+- When recommending courses, always provide at least one concrete next-step suggestion before ending the response.
+
 
 **Context Information:**
 ${context || "No user context available - treat as guest user"}
